@@ -57,6 +57,7 @@ export default defineNuxtConfig({
    * - /qrcode -> server/routes/qrcode.get.ts
    * - /avatar -> server/routes/avatar.get.ts
    * - /awareness -> app/pages/awareness.vue
+   * - /bwhTraffic/report -> server/routes/bwhTraffic/report.get.ts
    * - /tcloud/** (腾讯云防火墙放通接口) -> server/routes/tcloud/**
    */
   routeRules: {

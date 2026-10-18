@@ -24,12 +24,14 @@
 | `/qrcode` | Nuxt 4 | ✅ 已迁移 | `server/routes/qrcode.get.ts`，依赖 `qr-image` |
 | `/avatar` | Nuxt 4 | ✅ 已迁移 | `server/routes/avatar.get.ts`、`server/utils/avatar-generator.js` |
 | `/awareness` | Nuxt 4 | ✅ 已迁移 | `app/pages/awareness.vue` |
+| `GET /bwhTraffic/report` | Nuxt 4 | ✅ 已迁移 | `server/routes/bwhTraffic/report.get.ts` |
+| `bwhTrafficReport` | Nuxt 4 | ⏸ 默认关闭 | `server/plugins/bwh-traffic-schedule.ts`，每日 Asia/Shanghai 08:00 |
 | `/wx/**` | Egg.js | ⏳ 代理中 | 微信校验、消息和登录逻辑仍在 Egg |
 | `/qiniu/**` | Egg.js | ⏳ 代理中 | 七牛页面和 Token 逻辑仍在 Egg |
 | `/110perf/**` | Egg.js | ⏳ 代理中 | 性能数据接口仍在 Egg |
 | `/news/**` | Egg.js | ⏳ 代理中 | 当前只配置了网关代理 |
 | `/api/**` | 未确认 | ⚠️ 已配置代理 | 当前 `xEntry/app/router.js` 未发现对应 `/api` 路由，来源和用途待确认 |
-| 其他 Egg 路由 | Egg.js | ⚠️ 未接入本网关 | 包括 `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**`、`/hnxkc`、`/watermark`、`/huangjuan`、`/msg`、`/ip`、`/bwhTraffic/report`、`/aliyun/perf/dpy/` 等 |
+| 其他 Egg 路由 | Egg.js | ⚠️ 未接入本网关 | 包括 `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**`、`/hnxkc`、`/watermark`、`/huangjuan`、`/msg`、`/ip`、`/aliyun/perf/dpy/` 等 |
 | `clearWxDpyToken` | Egg.js | ⏸ 暂存 | 任务文件存在，但当前任务体内调用被注释，实际不会清理 Token |
 
 状态以代码为准。文档中的“已迁移”必须同时满足：Nuxt 实现完成、协议兼容、验证通过，并已移除对应代理规则。
@@ -59,6 +61,8 @@
 - `app/assets/css/main.css` 只放全局无害重置。
 - 页面专属背景、滚动行为等使用 `useHead({ bodyAttrs: { class: '...' } })` 局部控制。
 - 不在迁移过程中复制密钥、Token 或密码；服务端凭据必须通过环境变量注入。
+- BWH 汇报使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL`、`BWH_TRAFFIC_REPORT_TOKEN` 和 `BWH_TRAFFIC_SCHEDULE_ENABLED`；手动接口必须通过 `x-bwh-traffic-token` 校验；当前 xEntry 定时任务仍在运行，调度开关必须保持 `false`，除非旧任务已停用。
+- homepage 当前为单容器部署，BWH 调度不适用于多实例直接扩容，否则会重复发送。
 
 ## 4. 常用命令
 
