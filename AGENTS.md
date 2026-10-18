@@ -21,13 +21,13 @@
 | `POST /resume` | Nuxt 4 | ✅ 已迁移 | `server/routes/resume.post.ts` |
 | `/tcloud/mysql/open` | Nuxt 4 | ✅ 已迁移 | `server/routes/tcloud/mysql/open.get.ts` |
 | `/tcloud/ecs/open` | Nuxt 4 | ✅ 已迁移 | `server/routes/tcloud/ecs/open.get.ts` |
-| `/qrcode/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
-| `/avatar/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
+| `/qrcode` | Nuxt 4 | ✅ 已迁移 | `server/routes/qrcode.get.ts`，依赖 `qr-image` |
+| `/avatar` | Nuxt 4 | ✅ 已迁移 | `server/routes/avatar.get.ts`、`server/utils/avatar-generator.js` |
+| `/awareness` | Nuxt 4 | ✅ 已迁移 | `app/pages/awareness.vue` |
 | `/wx/**` | Egg.js | ⏳ 代理中 | 微信校验、消息和登录逻辑仍在 Egg |
 | `/qiniu/**` | Egg.js | ⏳ 代理中 | 七牛页面和 Token 逻辑仍在 Egg |
 | `/110perf/**` | Egg.js | ⏳ 代理中 | 性能数据接口仍在 Egg |
 | `/news/**` | Egg.js | ⏳ 代理中 | 当前只配置了网关代理 |
-| `/awareness/**` | Egg.js | ⏳ 代理中 | 页面模板仍在 Egg |
 | `/api/**` | 未确认 | ⚠️ 已配置代理 | 当前 `xEntry/app/router.js` 未发现对应 `/api` 路由，来源和用途待确认 |
 | 其他 Egg 路由 | Egg.js | ⚠️ 未接入本网关 | 包括 `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**`、`/hnxkc`、`/watermark`、`/huangjuan`、`/msg`、`/ip`、`/bwhTraffic/report`、`/aliyun/perf/dpy/` 等 |
 | `clearWxDpyToken` | Egg.js | ⏸ 暂存 | 任务文件存在，但当前任务体内调用被注释，实际不会清理 Token |

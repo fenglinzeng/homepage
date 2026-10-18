@@ -19,10 +19,13 @@
 - `POST /resume`：`server/routes/resume.post.ts`
 - `/tcloud/mysql/open`：`server/routes/tcloud/mysql/open.get.ts`
 - `/tcloud/ecs/open`：`server/routes/tcloud/ecs/open.get.ts`
+- `/qrcode`：`server/routes/qrcode.get.ts`
+- `/avatar`：`server/routes/avatar.get.ts`、`server/utils/avatar-generator.js`
+- `/awareness`：`app/pages/awareness.vue`
 
 当前通过 `routeRules` 代理到 `XENTRY_BACKEND_URL` 指向的 Egg 服务：
 
-`/qrcode/**`、`/avatar/**`、`/wx/**`、`/qiniu/**`、`/110perf/**`、`/news/**`、`/awareness/**`、`/api/**`。
+`/wx/**`、`/qiniu/**`、`/110perf/**`、`/news/**`、`/api/**`。
 
 旧 Egg 中的 `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**` 等路由当前未配置到 homepage 网关，是否需要纳入迁移范围待确认。
 

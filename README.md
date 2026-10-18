@@ -52,12 +52,13 @@ homepage/
 | `POST /resume` | 接口 | ✅ 已完成 | `server/routes/resume.post.ts` |
 | `/tcloud/mysql/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
 | `/tcloud/ecs/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
-| `/qrcode/**`、`/avatar/**` | 接口 | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
+| `/qrcode` | 接口 | ✅ 已完成 | `server/routes/qrcode.get.ts` |
+| `/avatar` | 接口 | ✅ 已完成 | `server/routes/avatar.get.ts` |
+| `/awareness` | 页面 | ✅ 已完成 | `app/pages/awareness.vue` |
 | `/wx/**` | 接口 | ⏳ 代理中 | 微信逻辑仍在 Egg |
 | `/qiniu/**` | 页面/接口 | ⏳ 代理中 | 七牛逻辑仍在 Egg |
 | `/110perf/**` | 接口 | ⏳ 代理中 | 性能数据仍在 Egg |
 | `/news/**` | 页面/接口 | ⏳ 代理中 | 当前只配置了网关代理 |
-| `/awareness/**` | 页面 | ⏳ 代理中 | Nunjucks 模板仍在 Egg |
 | `/api/**` | 接口 | ⚠️ 来源待确认 | 当前 Egg 路由文件未发现对应 `/api` 路由 |
 | 其他 Egg 路由 | 页面/接口 | ⚠️ 未接入本网关 | `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**`、`/hnxkc`、`/watermark`、`/huangjuan`、`/msg`、`/ip`、`/bwhTraffic/report`、`/aliyun/perf/dpy/` 等 |
 | `clearWxDpyToken` | 定时任务 | ⏸ 暂存 Egg | 任务存在，但当前清理调用已注释 |

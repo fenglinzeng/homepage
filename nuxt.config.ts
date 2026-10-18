@@ -54,16 +54,16 @@ export default defineNuxtConfig({
    * 当前已原生接管（已从下方代理列表移除）：
    * - / (首页) -> app/pages/index.vue
    * - /resume (简历页及接口) -> app/pages/resume.vue & server/routes/resume.post.ts
+   * - /qrcode -> server/routes/qrcode.get.ts
+   * - /avatar -> server/routes/avatar.get.ts
+   * - /awareness -> app/pages/awareness.vue
    * - /tcloud/** (腾讯云防火墙放通接口) -> server/routes/tcloud/**
    */
   routeRules: {
-    '/qrcode/**': { proxy: `${xEntryBackendUrl}/qrcode/**` },
-    '/avatar/**': { proxy: `${xEntryBackendUrl}/avatar/**` },
     '/wx/**': { proxy: `${xEntryBackendUrl}/wx/**` },
     '/qiniu/**': { proxy: `${xEntryBackendUrl}/qiniu/**` },
     '/110perf/**': { proxy: `${xEntryBackendUrl}/110perf/**` },
     '/news/**': { proxy: `${xEntryBackendUrl}/news/**` },
-    '/awareness/**': { proxy: `${xEntryBackendUrl}/awareness/**` },
     '/api/**': { proxy: `${xEntryBackendUrl}/api/**` }
   }
 })
