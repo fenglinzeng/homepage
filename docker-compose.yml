@@ -1,0 +1,13 @@
+services:
+  homepage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        XENTRY_BACKEND_URL: ${XENTRY_BACKEND_URL:?XENTRY_BACKEND_URL must be set in .env}
+    container_name: homepage
+    # xEntry 已部署在同一台服务器且监听宿主机 127.0.0.1:9999。
+    network_mode: host
+    env_file:
+      - .env
+    restart: unless-stopped

@@ -40,6 +40,9 @@ homepage/
 │   │   └── tcloud/**
 │   └── utils/tencent.ts         # 腾讯云 Lighthouse 封装
 ├── nuxt.config.ts               # Nuxt、SEO、样式和代理配置
+├── Dockerfile                   # 生产镜像构建
+├── docker-compose.yml           # homepage 生产容器编排
+├── deploy.sh                    # 生产部署入口
 └── package.json
 ```
 
@@ -83,3 +86,32 @@ node .output/server/index.mjs
 ```
 
 `NITRO_PORT` 控制 homepage 自身端口，`XENTRY_BACKEND_URL` 控制未迁移路由代理到哪个 xEntry 服务。`routeRules` 会在开发启动或生产构建时读取代理地址；生产环境修改代理地址后需重新执行 `pnpm build`。
+
+## 六、Docker Compose 生产部署
+
+homepage 和已部署的 xEntry 位于同一台 Linux 服务器时，Compose 只管理 homepage，不重新启动或接管 xEntry。由于 xEntry 监听宿主机 `127.0.0.1:9999`，homepage 使用 host 网络访问它。
+
+首次部署：
+
+```bash
+cp .env.example .env
+chmod 600 .env
+# 按生产环境填写 .env，至少确认 NITRO_HOST、NITRO_PORT 和 XENTRY_BACKEND_URL
+bash deploy.sh
+```
+
+后续更新：
+
+```bash
+git pull --ff-only origin main
+bash deploy.sh
+```
+
+`deploy.sh` 会校验 Compose 配置、构建 Linux 生产镜像并以 `unless-stopped` 策略启动 homepage。查看状态和日志：
+
+```bash
+docker compose ps
+docker compose logs -f homepage
+```
+
+生产环境不要把 `.env` 提交到 Git。`XENTRY_BACKEND_URL` 在镜像构建阶段读取，因此修改它后必须重新执行 `bash deploy.sh`。
