@@ -9,6 +9,12 @@ body,
     'Hiragino Sans GB', 'Microsoft YaHei', Helvetica, Arial, sans-serif;
 }
 
+/* RESS 会清除默认焦点轮廓，这里保留键盘操作的可见反馈。 */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* 仅首页生效的特殊全屏与背景样式（离开首页自动移除） */
 body.is-home-page {
   overflow: hidden;

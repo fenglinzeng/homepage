@@ -14,6 +14,9 @@ importers:
       qr-image:
         specifier: ^3.2.0
         version: 3.2.0
+      ress:
+        specifier: ^6.0.0
+        version: 6.0.0
       sharp:
         specifier: ^0.35.5
         version: 0.35.5
@@ -2656,6 +2659,9 @@ packages:
     resolution: {integrity: sha512-Dj/cW9zBV2aRj6XzCxuGIs3ESZKv02jixne3q6jFZYZ3/Tg09gHHviSMDL4kObh9pqSahdRHEnDoaP2gn8YLhA==}
     engines: {node: '>= 0.4'}
     hasBin: true
+
+  ress@6.0.0:
+    resolution: {integrity: sha512-4JxtIZmaO+i8rlzRTI1m6dTBr1g+T1ZNK/7Cwsc44622R4aOK/BbWLygBzoMo0JHAk8Q4yYvP9x0+7b3qH/xAw==}
 
   retry@0.12.0:
     resolution: {integrity: sha512-9LkiTwjUh6rT555DtE9rTX+BKByPfrMzEAtnlEtdEwr3Nkffwiihqe2bWADg+OQRjt9gl6ICdmB/ZFDCGAtSow==}
@@ -6277,6 +6283,8 @@ snapshots:
       is-core-module: 2.17.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
+
+  ress@6.0.0: {}
 
   retry@0.12.0: {}
 

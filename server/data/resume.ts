@@ -115,7 +115,7 @@ export const resumeData = {
       title: '海南冻品云供应链科技有限公司',
       intro:
         '<p>1、承担前端技术选型工作，设计和搭建前端架构，建立编码规范，完善前端工程化体系建设；</p><p>2、在多个项目中落地自己封装的脚手架，在部门内部推行ESLint，CommitLint，结合 Code Review 保障代码质量；</p><p>3、前期主导了商城 ERP 系统的前后端分离改造的前端部分。后期参与 JAVA 开发，经历多次重构，参与将整个商城系统从单体向微服务进行改造；</p><p>4、把控多个内部系统前后端的质量和进度，推崇敏捷开发，提倡多尝试实践新技术；</p><p>5、推动 Node.js 在技术部门的应用，一些报表和数据可视化的简单需求，通过 Node.js 由前端快速实现；</p><p>6、负责本地测试服务器和生产云服务器的搭建运维工作，通过Jenkins和云效流水线实现快速部署，通过负载均衡和服务监控保障生产服务高可用；</p>',
-      logo: 'https://cdn.brofen.cn/resume/static/images/dongpinyun.png',
+      logo: '/images/dongpinyun.png',
       position: '研发经理',
     },
     {
@@ -123,7 +123,7 @@ export const resumeData = {
       title: '房天下',
       intro:
         '<p>0、负责专题活动页面的开发（jQuery, Canvas）；</p><p>1、参与 m 站功能模块及常用组件开发（jQuery, Sea.js）；</p><p>2、参与 PC 站二手房详情页前端架构设计和重构（jQuery, Sea.js）；</p><p>3、参与 m 站自动化构建及部署设计（Gulp）；</p><p>4、内部数据可视化及相关内部管理系统的开发（Vue.js, Node.js）；</p><p>5、房天下新媒体工具开发（Chrome 浏览器插件）；</p>',
-      logo: 'https://cdn.brofen.cn/resume/static/images/soufun.png',
+      logo: '/images/soufun.png',
       position: '前端工程师',
     },
   ],

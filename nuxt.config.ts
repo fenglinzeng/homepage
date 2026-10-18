@@ -13,8 +13,8 @@ export default defineNuxtConfig({
     }
   },
 
-  // 全局样式表引入（只保留基础重置，避免全局样式污染其他页面）
-  css: ['~/assets/css/main.css'],
+  // RESS 先提供全局基础重置，项目样式随后补充焦点状态和页面级规则
+  css: ['ress/dist/ress.min.css', '~/assets/css/main.css'],
 
   // 全局 SEO 与 Head 基础设置（继承原 Egg 项目的基础信息）
   app: {

@@ -97,7 +97,7 @@
               <li class="timeline grid-item flex">
                 <div
                   class="grid-logo"
-                  style="background-image: url('https://cdn.brofen.cn/resume/static/images/dongpinyun.png');"
+                  style="background-image: url('/images/dongpinyun.png');"
                 ></div>
                 <div class="item-block flex-item">
                   <p class="job-name">
@@ -118,7 +118,7 @@
               <li class="timeline grid-item flex">
                 <div
                   class="grid-logo"
-                  style="background-image: url('https://cdn.brofen.cn/resume/static/images/soufun.png');"
+                  style="background-image: url('/images/soufun.png');"
                 ></div>
                 <div class="item-block flex-item">
                   <p class="job-name">
@@ -298,9 +298,6 @@ useHead({
   meta: [
     { name: 'HandheldFriendly', content: 'True' },
     { name: 'apple-mobile-web-app-capable', content: 'yes' }
-  ],
-  link: [
-    { rel: 'stylesheet', href: 'https://cdn.brofen.cn/resume/static/css/app.css' }
   ]
 })
 
@@ -317,12 +314,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-/* 简历页面专属样式补充，确保外部 app.css 加载时正常展示 */
-.wrap {
-  width: 100%;
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  color: #333;
-}
-</style>
+<style scoped src="~/assets/css/resume.css"></style>
