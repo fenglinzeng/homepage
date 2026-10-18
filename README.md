@@ -94,11 +94,10 @@ bash deploy.sh
 后续更新：
 
 ```bash
-git pull --ff-only origin main
 bash deploy.sh
 ```
 
-`deploy.sh` 会校验 Compose 配置、构建 Linux 生产镜像并以 `unless-stopped` 策略启动 homepage。查看状态和日志：
+`deploy.sh` 会先以 fast-forward-only 模式拉取 `origin/main`，再校验 Compose 配置、构建 Linux 生产镜像并以 `unless-stopped` 策略启动 homepage。查看状态和日志：
 
 ```bash
 docker compose ps
