@@ -15,14 +15,26 @@ export const tencentConfig = {
   instanceId: process.env.TENCENT_LIGHTHOUSE_INSTANCE_ID || '',
 }
 
+interface OpenPortOptions {
+  exposePort?: boolean
+}
+
 /**
  * 通用防火墙端口开放逻辑
  * @param event H3Event Nitro 请求事件对象
  * @param port 开放的端口号（如 3306、20202）
  * @param description 防火墙规则备注
  */
-export async function handleOpenPort(event: H3Event, port: string | number, description: string) {
+export async function handleOpenPort(
+  event: H3Event,
+  port: string | number,
+  description: string,
+  options: OpenPortOptions = {}
+) {
   const portStr = String(port)
+  const exposePort = options.exposePort ?? true
+  const portLabel = exposePort ? `${portStr} 端口` : '目标端口'
+  const portData = exposePort ? { port: portStr } : {}
   const query = getQuery(event)
   // 是否需要清理旧规则，仅当 query 参数传入 clear=1 时执行清理
   const shouldClear = query.clear === '1'
@@ -113,10 +125,10 @@ export async function handleOpenPort(event: H3Event, port: string | number, desc
     if (exists) {
       return {
         code: 0,
-        msg: `当前IP [${clientIp}] 已在 ${portStr} 端口白名单中，无需重复添加${shouldClear ? '（已执行旧规则清理）' : ''}`,
+        msg: `当前IP [${clientIp}] 已在 ${portLabel}白名单中，无需重复添加${shouldClear ? '（已执行旧规则清理）' : ''}`,
         data: {
           ip: clientIp,
-          port: portStr,
+          ...portData,
           cleared: shouldClear,
         },
       }
@@ -138,20 +150,20 @@ export async function handleOpenPort(event: H3Event, port: string | number, desc
 
     return {
       code: 0,
-      msg: `成功为当前IP [${clientIp}] 开放轻量服务器 ${portStr} 端口${shouldClear ? '（已清理旧规则）' : ''}`,
+      msg: `成功为当前IP [${clientIp}] 开放轻量服务器 ${portLabel}${shouldClear ? '（已清理旧规则）' : ''}`,
       data: {
         ip: clientIp,
-        port: portStr,
+        ...portData,
         cleared: shouldClear,
-        result: createRes,
+        ...(exposePort ? { result: createRes } : {}),
       },
     }
   } catch (err: any) {
     console.error(`[Lighthouse Firewall Error - Port ${portStr}]`, err)
     return {
       code: 500,
-      msg: err.message || `操作轻量服务器防火墙(${portStr})失败`,
-      error: err,
+      msg: exposePort ? err.message || `操作轻量服务器防火墙(${portStr})失败` : '操作轻量服务器防火墙失败',
+      ...(exposePort ? { error: err } : {}),
     }
   }
 }
