@@ -1,3 +1,6 @@
+// xEntry 代理目标从环境变量读取，便于本地联调和部署时调整。
+const xEntryBackendUrl = (process.env.XENTRY_BACKEND_URL || 'http://127.0.0.1:9999').replace(/\/+$/, '')
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // 保持与当前 Node/Nuxt 版本兼容性
@@ -44,7 +47,7 @@ export default defineNuxtConfig({
    * 渐进式平移反向代理规则（绞杀者模式）
    * 
    * 【接手指南】：
-   * 1. 凡是尚未迁移至 Nuxt 的老模块，在此处配置 proxy 透传给原 Egg.js 服务（默认运行在 7001 端口）；
+   * 1. 凡是尚未迁移至 Nuxt 的老模块，在此处配置 proxy 透传给原 Egg.js 服务；目标由 XENTRY_BACKEND_URL 提供，默认是 127.0.0.1:9999；
    * 2. 当某项业务逻辑（如页面或接口）在 Nuxt 内部重构完毕后，请务必从下方的 routeRules 中【删除对应的代理项】，
    *    让请求由 Nuxt (Nitro) 自身路由处理，以此完成一个模块的彻底解耦。
    * 
@@ -54,13 +57,13 @@ export default defineNuxtConfig({
    * - /tcloud/** (腾讯云防火墙放通接口) -> server/routes/tcloud/**
    */
   routeRules: {
-    '/qrcode/**': { proxy: 'http://127.0.0.1:7001/qrcode/**' },
-    '/avatar/**': { proxy: 'http://127.0.0.1:7001/avatar/**' },
-    '/wx/**': { proxy: 'http://127.0.0.1:7001/wx/**' },
-    '/qiniu/**': { proxy: 'http://127.0.0.1:7001/qiniu/**' },
-    '/110perf/**': { proxy: 'http://127.0.0.1:7001/110perf/**' },
-    '/news/**': { proxy: 'http://127.0.0.1:7001/news/**' },
-    '/awareness/**': { proxy: 'http://127.0.0.1:7001/awareness/**' },
-    '/api/**': { proxy: 'http://127.0.0.1:7001/api/**' }
+    '/qrcode/**': { proxy: `${xEntryBackendUrl}/qrcode/**` },
+    '/avatar/**': { proxy: `${xEntryBackendUrl}/avatar/**` },
+    '/wx/**': { proxy: `${xEntryBackendUrl}/wx/**` },
+    '/qiniu/**': { proxy: `${xEntryBackendUrl}/qiniu/**` },
+    '/110perf/**': { proxy: `${xEntryBackendUrl}/110perf/**` },
+    '/news/**': { proxy: `${xEntryBackendUrl}/news/**` },
+    '/awareness/**': { proxy: `${xEntryBackendUrl}/awareness/**` },
+    '/api/**': { proxy: `${xEntryBackendUrl}/api/**` }
   }
 })

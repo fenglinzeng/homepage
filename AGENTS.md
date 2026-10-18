@@ -6,9 +6,10 @@
 
 - **本项目**：独立的 **Nuxt 4** 网关与全栈应用，仓库根目录就是 Nuxt 项目根目录，不存在 `nuxtjs/` 子目录。
 - **原项目**：旧的 **Egg.js 2.x** 服务位于独立的 `xEntry` 仓库，不属于本仓库目录。
-- **Nuxt 默认端口**：开发服务默认使用 `3000`。
+- **Nuxt 默认端口**：由 `NITRO_PORT` 控制，未配置时默认使用 `3000`。
 - **Egg 源码端口**：`xEntry/config/config.default.js` 当前配置为 `127.0.0.1:9999`。
-- **当前代理目标**：本项目 `nuxt.config.ts` 中的 `routeRules` 指向 `127.0.0.1:7001`。这表示部署环境必须提供 `9999 -> 7001` 的端口映射，或在部署时明确调整代理目标；不要把 `7001` 当作 Egg 源码的默认监听端口。
+- **当前代理目标**：本项目 `nuxt.config.ts` 中的 `routeRules` 读取 `XENTRY_BACKEND_URL`，默认指向 `http://127.0.0.1:9999`。如部署层使用其他端口或域名，在 `.env` 中调整该变量；不要把 `7001` 当作 Egg 源码的默认监听端口。
+- **配置生效时机**：`routeRules` 在 Nuxt 开发启动或生产构建时读取环境变量；生产环境修改 `XENTRY_BACKEND_URL` 后需重新执行 `pnpm build`。
 - **迁移方式**：采用绞杀者模式（Strangler Fig Pattern）。已迁移的页面和接口由 Nuxt 原生处理，仍在 Egg 中的模块通过显式代理转发。
 
 ## 2. 当前迁移状态
@@ -20,8 +21,8 @@
 | `POST /resume` | Nuxt 4 | ✅ 已迁移 | `server/routes/resume.post.ts` |
 | `/tcloud/mysql/open` | Nuxt 4 | ✅ 已迁移 | `server/routes/tcloud/mysql/open.get.ts` |
 | `/tcloud/ecs/open` | Nuxt 4 | ✅ 已迁移 | `server/routes/tcloud/ecs/open.get.ts` |
-| `/qrcode/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `127.0.0.1:7001` |
-| `/avatar/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `127.0.0.1:7001` |
+| `/qrcode/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
+| `/avatar/**` | Egg.js | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
 | `/wx/**` | Egg.js | ⏳ 代理中 | 微信校验、消息和登录逻辑仍在 Egg |
 | `/qiniu/**` | Egg.js | ⏳ 代理中 | 七牛页面和 Token 逻辑仍在 Egg |
 | `/110perf/**` | Egg.js | ⏳ 代理中 | 性能数据接口仍在 Egg |
@@ -68,3 +69,5 @@ pnpm dev
 pnpm build
 node .output/server/index.mjs
 ```
+
+首次运行可复制 `.env.example` 为 `.env`，再按实际环境填写 `NITRO_PORT` 和 `XENTRY_BACKEND_URL`。`.env` 只保留在本机或部署环境，不提交到仓库。

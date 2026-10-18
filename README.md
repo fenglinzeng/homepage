@@ -8,7 +8,7 @@
 [ 用户客户端 / Nginx 入口 ]
              │
              ▼
-      Nuxt 4 网关（默认端口 3000）
+      Nuxt 4 网关（NITRO_PORT，默认端口 3000）
     ┌──────────────────────────────────────┐
     │ 已迁移页面和接口：Nuxt / Nitro 原生处理 │
     │ 未迁移模块：按 routeRules 代理到 Egg   │
@@ -17,10 +17,10 @@
              ▼
       xEntry Egg.js 服务
       源码默认监听：127.0.0.1:9999
-      当前代理目标：127.0.0.1:7001
+      代理目标：XENTRY_BACKEND_URL（默认 127.0.0.1:9999）
 ```
 
-`9999` 是 `xEntry/config/config.default.js` 的源码配置，`7001` 是本项目 `nuxt.config.ts` 写入的代理目标。两者之间是否有部署层端口映射必须在联调环境确认，不能仅凭文档假定。
+`9999` 是 `xEntry/config/config.default.js` 的源码配置。homepage 的 `routeRules` 通过 `XENTRY_BACKEND_URL` 配置代理目标，默认直接指向 `http://127.0.0.1:9999`；如果部署层使用其他端口或域名，应在 `.env` 中调整该变量，不再固定假设 `7001`。
 
 ## 二、目录结构
 
@@ -52,7 +52,7 @@ homepage/
 | `POST /resume` | 接口 | ✅ 已完成 | `server/routes/resume.post.ts` |
 | `/tcloud/mysql/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
 | `/tcloud/ecs/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
-| `/qrcode/**`、`/avatar/**` | 接口 | ⏳ 代理中 | `routeRules` -> Egg |
+| `/qrcode/**`、`/avatar/**` | 接口 | ⏳ 代理中 | `routeRules` -> `XENTRY_BACKEND_URL` |
 | `/wx/**` | 接口 | ⏳ 代理中 | 微信逻辑仍在 Egg |
 | `/qiniu/**` | 页面/接口 | ⏳ 代理中 | 七牛逻辑仍在 Egg |
 | `/110perf/**` | 接口 | ⏳ 代理中 | 性能数据仍在 Egg |
@@ -75,7 +75,10 @@ homepage/
 在本仓库根目录执行：
 
 ```bash
+cp .env.example .env
 pnpm dev
 pnpm build
 node .output/server/index.mjs
 ```
+
+`NITRO_PORT` 控制 homepage 自身端口，`XENTRY_BACKEND_URL` 控制未迁移路由代理到哪个 xEntry 服务。`routeRules` 会在开发启动或生产构建时读取代理地址；生产环境修改代理地址后需重新执行 `pnpm build`。

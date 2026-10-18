@@ -4,11 +4,11 @@
 
 ## 运行关系
 
-- Nuxt 开发服务默认：`http://localhost:3000`
+- Nuxt 服务端口：由 `NITRO_PORT` 控制，默认 `3000`
 - Egg 源码默认监听：`xEntry/config/config.default.js` 中的 `127.0.0.1:9999`
-- 当前 Nuxt `routeRules` 代理目标：`http://127.0.0.1:7001`
+- 当前 Nuxt `routeRules` 代理目标：由 `XENTRY_BACKEND_URL` 控制，默认 `http://127.0.0.1:9999`
 
-`9999` 与 `7001` 并不由当前两个仓库自动统一。部署或本地联调前，必须确认是否存在端口映射；否则应按实际部署端口调整代理配置。
+`9999` 是 xEntry 源码默认监听端口。若部署层使用其他端口或域名，在 `.env` 中设置 `XENTRY_BACKEND_URL`；生产构建完成后修改该变量需要重新执行 `pnpm build`。
 
 ## 迁移状态
 
@@ -20,7 +20,7 @@
 - `/tcloud/mysql/open`：`server/routes/tcloud/mysql/open.get.ts`
 - `/tcloud/ecs/open`：`server/routes/tcloud/ecs/open.get.ts`
 
-当前通过 `routeRules` 代理到 Egg：
+当前通过 `routeRules` 代理到 `XENTRY_BACKEND_URL` 指向的 Egg 服务：
 
 `/qrcode/**`、`/avatar/**`、`/wx/**`、`/qiniu/**`、`/110perf/**`、`/news/**`、`/awareness/**`、`/api/**`。
 
@@ -41,3 +41,5 @@ pnpm dev
 pnpm build
 node .output/server/index.mjs
 ```
+
+本地配置：复制 `.env.example` 为 `.env`，按环境填写 `NITRO_PORT`、`NITRO_HOST` 和 `XENTRY_BACKEND_URL`。生产环境建议由 PM2、Docker 或 systemd 注入这些变量。
