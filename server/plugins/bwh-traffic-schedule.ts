@@ -3,7 +3,7 @@ import { getMillisecondsUntilNextShanghaiEight } from '~~/server/utils/bwh-traff
 
 /**
  * BWH 每日汇报调度。
- * 默认关闭，避免与仍在运行的 xEntry Egg 定时任务重复发送。
+ * 默认关闭；生产按实际调度需要通过环境变量启用。
  */
 export default defineNitroPlugin((nitroApp) => {
   if (process.env.BWH_TRAFFIC_SCHEDULE_ENABLED !== 'true') {

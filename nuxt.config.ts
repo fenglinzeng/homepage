@@ -1,6 +1,3 @@
-// xEntry 代理目标从环境变量读取，便于本地联调和部署时调整。
-const xEntryBackendUrl = (process.env.XENTRY_BACKEND_URL || 'http://127.0.0.1:9999').replace(/\/+$/, '')
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // 保持与当前 Node/Nuxt 版本兼容性
@@ -43,28 +40,4 @@ export default defineNuxtConfig({
     }
   },
 
-  /**
-   * 渐进式平移反向代理规则（绞杀者模式）
-   * 
-   * 【接手指南】：
-   * 1. 凡是尚未迁移至 Nuxt 的老模块，在此处配置 proxy 透传给原 Egg.js 服务；目标由 XENTRY_BACKEND_URL 提供，默认是 127.0.0.1:9999；
-   * 2. 当某项业务逻辑（如页面或接口）在 Nuxt 内部重构完毕后，请务必从下方的 routeRules 中【删除对应的代理项】，
-   *    让请求由 Nuxt (Nitro) 自身路由处理，以此完成一个模块的彻底解耦。
-   * 
-   * 当前已原生接管（已从下方代理列表移除）：
-   * - / (首页) -> app/pages/index.vue
-   * - /resume (简历页及接口) -> app/pages/resume.vue & server/routes/resume.post.ts
-   * - /qrcode -> server/routes/qrcode.get.ts
-   * - /avatar -> server/routes/avatar.get.ts
-   * - /awareness -> app/pages/awareness.vue
-   * - /bwhTraffic/report -> server/routes/bwhTraffic/report.get.ts
-   * - /tcloud/** (腾讯云防火墙放通接口) -> server/routes/tcloud/**
-   */
-  routeRules: {
-    '/wx/**': { proxy: `${xEntryBackendUrl}/wx/**` },
-    '/qiniu/**': { proxy: `${xEntryBackendUrl}/qiniu/**` },
-    '/110perf/**': { proxy: `${xEntryBackendUrl}/110perf/**` },
-    '/news/**': { proxy: `${xEntryBackendUrl}/news/**` },
-    '/api/**': { proxy: `${xEntryBackendUrl}/api/**` }
-  }
 })

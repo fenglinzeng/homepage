@@ -3,11 +3,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        XENTRY_BACKEND_URL: ${XENTRY_BACKEND_URL:?XENTRY_BACKEND_URL must be set in .env}
     container_name: homepage
-    # xEntry 已部署在同一台服务器且监听宿主机 127.0.0.1:9999。
-    network_mode: host
+    # 只将 homepage 端口绑定到宿主机回环地址，由 Tengine 转发对外提供服务。
+    ports:
+      - "127.0.0.1:${NITRO_PORT:?NITRO_PORT must be set in .env}:${NITRO_PORT:?NITRO_PORT must be set in .env}"
     env_file:
       - .env
+    environment:
+      # 容器内部需要监听所有容器网卡，宿主机暴露范围由 ports 的 127.0.0.1 约束。
+      NITRO_HOST: 0.0.0.0
     restart: unless-stopped

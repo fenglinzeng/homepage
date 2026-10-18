@@ -1,26 +1,21 @@
-# homepage：xEntry 到 Nuxt 4 的渐进式迁移
+# homepage：Nuxt 4 全栈应用
 
-本项目是独立的 Nuxt 4 全栈应用和前置网关，用于逐步承接旧 `xEntry` Egg.js 服务。旧服务位于独立仓库，不是本仓库的 `nuxtjs/` 子目录。
+本项目是基于 Nuxt 4 的全栈应用，使用 Nuxt 页面、Nitro 服务端路由和 Docker Compose 运行。
 
 ## 一、运行模型
 
 ```text
-[ 用户客户端 / Nginx 入口 ]
+[ 用户客户端 / Tengine 入口 ]
              │
              ▼
-      Nuxt 4 网关（NITRO_PORT，默认端口 3000）
+      Nuxt 4 应用（NITRO_PORT，默认端口 3000）
     ┌──────────────────────────────────────┐
-    │ 已迁移页面和接口：Nuxt / Nitro 原生处理 │
-    │ 未迁移模块：按 routeRules 代理到 Egg   │
+    │ 页面：Nuxt 页面原生处理                │
+    │ 接口：Nitro 服务端路由原生处理         │
     └──────────────────────────────────────┘
-             │
-             ▼
-      xEntry Egg.js 服务
-      源码默认监听：127.0.0.1:9999
-      代理目标：XENTRY_BACKEND_URL（默认 127.0.0.1:9999）
 ```
 
-`9999` 是 `xEntry/config/config.default.js` 的源码配置。homepage 的 `routeRules` 通过 `XENTRY_BACKEND_URL` 配置代理目标，默认直接指向 `http://127.0.0.1:9999`；如果部署层使用其他端口或域名，应在 `.env` 中调整该变量，不再固定假设 `7001`。
+当前生产环境由 Tengine 将主入口转发到 homepage 的 `3000` 端口。
 
 ## 二、目录结构
 
@@ -44,44 +39,31 @@ homepage/
 │   │   ├── bwh-traffic-schedule.ts
 │   │   └── tencent.ts            # 腾讯云 Lighthouse 封装
 │   └── plugins/bwh-traffic-schedule.ts
-├── nuxt.config.ts               # Nuxt、SEO、样式和代理配置
+├── nuxt.config.ts               # Nuxt、SEO 和样式配置
 ├── Dockerfile                   # 生产镜像构建
-├── docker-compose.yml           # homepage 生产容器编排
+├── docker-compose.yml           # 生产容器编排
 ├── deploy.sh                    # 生产部署入口
 └── package.json
 ```
 
-## 三、迁移状态
+## 三、当前功能
 
-| 模块/路由 | 类型 | 当前状态 | 承接方式 |
-| :--- | :--- | :--- | :--- |
-| `/` | 页面 | ✅ 已完成 | `app/pages/index.vue` |
-| `GET /resume` | 页面 | ✅ 已完成 | `app/pages/resume.vue` |
-| `POST /resume` | 接口 | ✅ 已完成 | `server/routes/resume.post.ts` |
-| `/tcloud/mysql/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
-| `/tcloud/ecs/open` | 接口 | ✅ 已完成 | Nuxt Nitro 原生路由 |
-| `/qrcode` | 接口 | ✅ 已完成 | `server/routes/qrcode.get.ts` |
-| `/avatar` | 接口 | ✅ 已完成 | `server/routes/avatar.get.ts` |
-| `/awareness` | 页面 | ✅ 已完成 | `app/pages/awareness.vue` |
-| `GET /bwhTraffic/report` | 接口 | ✅ 已完成 | `server/routes/bwhTraffic/report.get.ts` |
-| `bwhTrafficReport` | 定时任务 | ⏸ 默认关闭 | `server/plugins/bwh-traffic-schedule.ts`，每日 Asia/Shanghai 08:00 |
-| `/wx/**` | 接口 | ⏳ 代理中 | 微信逻辑仍在 Egg |
-| `/qiniu/**` | 页面/接口 | ⏳ 代理中 | 七牛逻辑仍在 Egg |
-| `/110perf/**` | 接口 | ⏳ 代理中 | 性能数据仍在 Egg |
-| `/news/**` | 页面/接口 | ⏳ 代理中 | 当前只配置了网关代理 |
-| `/api/**` | 接口 | ⚠️ 来源待确认 | 当前 Egg 路由文件未发现对应 `/api` 路由 |
-| 其他 Egg 路由 | 页面/接口 | ⚠️ 未接入本网关 | `/n/ghost/**`、`/debug`、`/mail`、`/wb/**`、`/githook/**`、`/weapp-mall/**`、`/jiayouya/**`、`/hnxkc`、`/watermark`、`/huangjuan`、`/msg`、`/ip`、`/aliyun/perf/dpy/` 等 |
-| `clearWxDpyToken` | 定时任务 | ⏸ 暂存 Egg | 任务存在，但当前清理调用已注释 |
+| 路由或任务 | 类型 | 实现位置 |
+| :--- | :--- | :--- |
+| `/` | 页面 | `app/pages/index.vue` |
+| `GET /resume` | 页面 | `app/pages/resume.vue` |
+| `POST /resume` | 接口 | `server/routes/resume.post.ts` |
+| `/tcloud/mysql/open` | 接口 | `server/routes/tcloud/mysql/open.get.ts` |
+| `/tcloud/ecs/open` | 接口 | `server/routes/tcloud/ecs/open.get.ts` |
+| `/qrcode` | 接口 | `server/routes/qrcode.get.ts` |
+| `/avatar` | 接口 | `server/routes/avatar.get.ts`、`server/utils/avatar-generator.js` |
+| `/awareness` | 页面 | `app/pages/awareness.vue` |
+| `GET /bwhTraffic/report` | 接口 | `server/routes/bwhTraffic/report.get.ts` |
+| `bwhTrafficReport` | 定时任务 | `server/plugins/bwh-traffic-schedule.ts`，每日 Asia/Shanghai 08:00 |
 
-## 四、继续迁移
+新增服务端接口放在 `server/routes/`，按 Nitro 文件名约定表达 HTTP 方法；共享逻辑放在 `server/utils/`。服务端密钥和 Token 只从环境变量读取，不写入仓库。
 
-1. 在 `xEntry` 仓库中确认原始路由、控制器、服务和模板。
-2. 页面放入 `app/pages/`；保持原 URL 的接口放入 `server/routes/`；共享逻辑放入 `server/utils/`。
-3. 对照原接口验证方法、参数、返回 JSON 和副作用。
-4. 确认新实现可用后，再从 `nuxt.config.ts` 的 `routeRules` 删除对应代理项。
-5. 服务端密钥和 Token 只从环境变量读取，不写入仓库。
-
-## 五、开发与构建
+## 四、开发与构建
 
 在本仓库根目录执行：
 
@@ -92,20 +74,20 @@ pnpm build
 node .output/server/index.mjs
 ```
 
-`NITRO_PORT` 控制 homepage 自身端口，`XENTRY_BACKEND_URL` 控制未迁移路由代理到哪个 xEntry 服务。`routeRules` 会在开发启动或生产构建时读取代理地址；生产环境修改代理地址后需重新执行 `pnpm build`。
+本地直接运行时，`NITRO_HOST` 和 `NITRO_PORT` 控制 homepage 服务监听地址和端口。生产 Compose 会让容器监听 `0.0.0.0`，但只将宿主机端口绑定到 `127.0.0.1`，由 Tengine 对外提供服务。
 
-BWH 汇报配置使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL` 和手动接口令牌 `BWH_TRAFFIC_REPORT_TOKEN`，只在本机或生产服务器的 `.env` 中填写。手动调用时通过 `x-bwh-traffic-token` 请求头传入令牌。`BWH_TRAFFIC_SCHEDULE_ENABLED` 默认是 `false`；当前 xEntry 的旧任务仍在运行，保持关闭即可避免重复发送。只有确认旧任务已停用后，才应改为 `true`。
+BWH 汇报配置使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL` 和手动接口令牌 `BWH_TRAFFIC_REPORT_TOKEN`，只在本机或生产服务器的 `.env` 中填写。手动调用时通过 `x-bwh-traffic-token` 请求头传入令牌。`BWH_TRAFFIC_SCHEDULE_ENABLED` 在代码和 `.env.example` 中默认是 `false`；生产按实际调度需要设置为 `true`。本地开发通常保持 `false`，避免本地实例发送真实汇报。
 
-## 六、Docker Compose 生产部署
+## 五、Docker Compose 生产部署
 
-homepage 和已部署的 xEntry 位于同一台 Linux 服务器时，Compose 只管理 homepage，不重新启动或接管 xEntry。由于 xEntry 监听宿主机 `127.0.0.1:9999`，homepage 使用 host 网络访问它。
+Compose 只管理 homepage。容器端口通过 `.env` 中的 `NITRO_PORT` 配置，并只绑定到宿主机 `127.0.0.1`，由 Tengine 转发对外提供服务。
 
 首次部署：
 
 ```bash
 cp .env.example .env
 chmod 600 .env
-# 按生产环境填写 .env，至少确认 NITRO_HOST、NITRO_PORT 和 XENTRY_BACKEND_URL；如使用 BWH 接口，还需填写 BWH_TRAFFIC_API_URL、BWH_TRAFFIC_WEBHOOK_URL 和 BWH_TRAFFIC_REPORT_TOKEN
+# 按生产环境填写 .env，至少确认 NITRO_HOST、NITRO_PORT；如使用腾讯云接口，还需填写 TENCENT_*；如使用 BWH 汇报，还需填写 BWH_TRAFFIC_API_URL、BWH_TRAFFIC_WEBHOOK_URL 和 BWH_TRAFFIC_REPORT_TOKEN
 bash deploy.sh
 ```
 
@@ -123,6 +105,6 @@ docker compose ps
 docker compose logs -f homepage
 ```
 
-生产环境不要把 `.env` 提交到 Git。`XENTRY_BACKEND_URL` 在镜像构建阶段读取，因此修改它后必须重新执行 `bash deploy.sh`。
+生产环境不要把 `.env` 提交到 Git。修改 `NITRO_PORT` 后需要同步调整 Tengine upstream 端口，再执行 `bash deploy.sh`。
 
-当前部署为单个 homepage 容器。BWH 定时任务启用后由 homepage 进程执行，多实例部署会造成重复汇报；并且必须先停用 xEntry 中同一任务。
+当前部署为单个 homepage 容器。BWH 定时任务启用后由 homepage 进程执行，多实例部署会造成重复汇报。

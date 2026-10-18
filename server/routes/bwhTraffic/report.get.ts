@@ -35,10 +35,11 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     const message = error instanceof Error ? error.message : '未知错误'
     console.error(`[BwhTrafficController] 手动汇报失败: ${message}`)
+    setResponseStatus(event, 502)
 
     return {
       success: false,
-      message: `手动汇报触发失败: ${message}`,
+      message: '手动汇报触发失败，请查看服务端日志。',
     }
   }
 })

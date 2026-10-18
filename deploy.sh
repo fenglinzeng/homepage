@@ -19,6 +19,27 @@ else
   exit 1
 fi
 
-"${COMPOSE[@]}" config --quiet
+"${COMPOSE[@]}" config -q
 "${COMPOSE[@]}" up -d --build
+
+for _ in {1..30}; do
+  health_status="$(docker inspect --format '{{.State.Health.Status}}' homepage 2>/dev/null || true)"
+
+  if [[ "$health_status" == "healthy" ]]; then
+    "${COMPOSE[@]}" ps
+    exit 0
+  fi
+
+  if [[ "$health_status" == "unhealthy" ]]; then
+    "${COMPOSE[@]}" logs --tail=80 homepage >&2 || true
+    echo "homepage 健康检查失败。" >&2
+    exit 1
+  fi
+
+  sleep 2
+done
+
 "${COMPOSE[@]}" ps
+"${COMPOSE[@]}" logs --tail=80 homepage >&2 || true
+echo "等待 homepage 健康检查超时。" >&2
+exit 1
