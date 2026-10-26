@@ -5,7 +5,7 @@ WORKDIR /app
 RUN corepack enable
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --allow-build esbuild
+RUN pnpm install --frozen-lockfile --allow-build esbuild --allow-build @alicloud/openapi-core
 
 COPY . .
 
