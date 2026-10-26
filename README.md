@@ -32,9 +32,11 @@ homepage/
 │   ├── data/resume.ts           # 简历结构化数据
 │   ├── routes/
 │   │   ├── resume.post.ts
+│   │   ├── sms/send.post.ts
 │   │   ├── bwhTraffic/report.get.ts
 │   │   └── tcloud/**
 │   ├── utils/
+│   │   ├── aliyun-sms.ts
 │   │   ├── bwh-traffic-report.ts
 │   │   ├── bwh-traffic-schedule.ts
 │   │   └── tencent.ts            # 腾讯云 Lighthouse 封装
@@ -53,6 +55,7 @@ homepage/
 | `/` | 页面 | `app/pages/index.vue` |
 | `GET /resume` | 页面 | `app/pages/resume.vue` |
 | `POST /resume` | 接口 | `server/routes/resume.post.ts` |
+| `POST /sms/send` | 接口 | `server/routes/sms/send.post.ts`、`server/utils/aliyun-sms.ts` |
 | `/tcloud/mysql/open` | 接口 | `server/routes/tcloud/mysql/open.get.ts` |
 | `/tcloud/ecs/open` | 接口 | `server/routes/tcloud/ecs/open.get.ts` |
 | `/qrcode` | 接口 | `server/routes/qrcode.get.ts` |
@@ -78,6 +81,8 @@ node .output/server/index.mjs
 
 BWH 汇报配置使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL` 和手动接口令牌 `BWH_TRAFFIC_REPORT_TOKEN`，只在本机或生产服务器的 `.env` 中填写。手动调用时通过 `x-bwh-traffic-token` 请求头传入令牌。`BWH_TRAFFIC_SCHEDULE_ENABLED` 在代码和 `.env.example` 中默认是 `false`；生产按实际调度需要设置为 `true`。本地开发通常保持 `false`，避免本地实例发送真实汇报。
 
+短信接口 `POST /sms/send` 需要请求头 `x-sms-token`，请求体为 `{"msg":"123456","telephone":"17600119277"}`。服务端使用 `SMS_SEND_TOKEN` 校验令牌，并使用 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`SMS_SIGN_NAME`、`SMS_TEMPLATE_CODE` 和 `SMS_TEMPLATE_PARAM` 调用阿里云短信；请求体中的 `msg` 会覆盖模板参数中的 `code`。接口只允许中国大陆 11 位手机号，发送失败不会向前端返回阿里云原始响应或凭据。
+
 ## 五、Docker Compose 生产部署
 
 Compose 只管理 homepage。容器端口通过 `.env` 中的 `NITRO_PORT` 配置，并只绑定到宿主机 `127.0.0.1`，由 Tengine 转发对外提供服务。
@@ -87,7 +92,7 @@ Compose 只管理 homepage。容器端口通过 `.env` 中的 `NITRO_PORT` 配�
 ```bash
 cp .env.example .env
 chmod 600 .env
-# 按生产环境填写 .env，至少确认 NITRO_HOST、NITRO_PORT；如使用腾讯云接口，还需填写 TENCENT_*；如使用 BWH 汇报，还需填写 BWH_TRAFFIC_API_URL、BWH_TRAFFIC_WEBHOOK_URL 和 BWH_TRAFFIC_REPORT_TOKEN
+# 按生产环境填写 .env，至少确认 NITRO_HOST、NITRO_PORT；如使用腾讯云接口，还需填写 TENCENT_*；如使用 BWH 汇报，还需填写 BWH_TRAFFIC_API_URL、BWH_TRAFFIC_WEBHOOK_URL 和 BWH_TRAFFIC_REPORT_TOKEN；如使用短信接口，还需填写阿里云凭据和 SMS_* 配置
 bash deploy.sh
 ```
 
