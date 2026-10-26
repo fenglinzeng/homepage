@@ -1,4 +1,4 @@
-import Dysmsapi20170525, * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525'
+import DysmsapiClientModule, * as $Dysmsapi20170525 from '@alicloud/dysmsapi20170525'
 import * as $OpenApi from '@alicloud/openapi-client'
 import * as $Util from '@alicloud/tea-util'
 
@@ -29,7 +29,10 @@ function getClient() {
     accessKeySecret: getRequiredEnv('ALIBABA_CLOUD_ACCESS_KEY_SECRET'),
   })
   config.endpoint = 'dysmsapi.aliyuncs.com'
-  client = new Dysmsapi20170525(config)
+  const DysmsapiClient =
+    (DysmsapiClientModule as unknown as { default?: typeof DysmsapiClientModule }).default ??
+    DysmsapiClientModule
+  client = new DysmsapiClient(config)
 
   return client
 }
