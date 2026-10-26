@@ -31,12 +31,24 @@ export default defineEventHandler(async (event) => {
 
   const msg = typeof body?.msg === 'string' ? body.msg.trim() : ''
   const telephone = typeof body?.telephone === 'string' ? body.telephone.trim() : ''
+  const invalidFields: Record<string, unknown> = {}
 
-  if (!/^[a-zA-Z0-9]{1,64}$/.test(msg) || !/^1[3-9]\d{9}$/.test(telephone)) {
+  if (!/^[a-zA-Z0-9]{1,64}$/.test(msg)) {
+    invalidFields.msg = body?.msg ?? null
+  }
+
+  if (!/^1[3-9]\d{9}$/.test(telephone)) {
+    invalidFields.telephone = body?.telephone ?? null
+  }
+
+  if (Object.keys(invalidFields).length > 0) {
     setResponseStatus(event, 400)
     return {
       code: 400,
       msg: 'msg 必须为 1-64 个字母或数字，telephone 必须为有效的中国大陆手机号。',
+      error: {
+        fields: invalidFields,
+      },
     }
   }
 
@@ -49,7 +61,10 @@ export default defineEventHandler(async (event) => {
       data,
     }
   } catch (error) {
-    console.error('[SmsController] 短信发送失败。', error instanceof Error ? error.message : '未知错误')
+    console.error(
+      '[SmsController] 短信发送失败。',
+      error instanceof Error ? error.message : '未知错误'
+    )
     setResponseStatus(event, 502)
 
     return {
