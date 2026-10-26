@@ -32,11 +32,11 @@ export default defineEventHandler(async (event) => {
   const msg = typeof body?.msg === 'string' ? body.msg.trim() : ''
   const telephone = typeof body?.telephone === 'string' ? body.telephone.trim() : ''
 
-  if (!msg || msg.length > 64 || !/^1[3-9]\d{9}$/.test(telephone)) {
+  if (!/^[a-zA-Z0-9]{1,64}$/.test(msg) || !/^1[3-9]\d{9}$/.test(telephone)) {
     setResponseStatus(event, 400)
     return {
       code: 400,
-      msg: 'msg 必须为 1-64 个字符，telephone 必须为有效的中国大陆手机号。',
+      msg: 'msg 必须为 1-64 个字母或数字，telephone 必须为有效的中国大陆手机号。',
     }
   }
 

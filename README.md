@@ -81,7 +81,7 @@ node .output/server/index.mjs
 
 BWH 汇报配置使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL` 和手动接口令牌 `BWH_TRAFFIC_REPORT_TOKEN`，只在本机或生产服务器的 `.env` 中填写。手动调用时通过 `x-bwh-traffic-token` 请求头传入令牌。`BWH_TRAFFIC_SCHEDULE_ENABLED` 在代码和 `.env.example` 中默认是 `false`；生产按实际调度需要设置为 `true`。本地开发通常保持 `false`，避免本地实例发送真实汇报。
 
-短信接口 `POST /sms/send` 需要请求头 `x-sms-token`，请求体为 `{"msg":"123456","telephone":"17600119277"}`。服务端使用 `SMS_SEND_TOKEN` 校验令牌，并使用 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`SMS_SIGN_NAME`、`SMS_TEMPLATE_CODE` 和 `SMS_TEMPLATE_PARAM` 调用阿里云短信；请求体中的 `msg` 会覆盖模板参数中的 `code`。接口只允许中国大陆 11 位手机号，发送失败不会向前端返回阿里云原始响应或凭据。
+短信接口 `POST /sms/send` 需要请求头 `x-sms-token`，请求体为 `{"msg":"123456","telephone":"17600119277"}`。服务端使用 `SMS_SEND_TOKEN` 校验令牌，并使用 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`SMS_SIGN_NAME`、`SMS_TEMPLATE_CODE` 和 `SMS_TEMPLATE_PARAM` 调用阿里云短信；当前验证码模板要求请求体中的 `msg` 为 1-64 个英文字母或数字，接口会用它覆盖模板参数中的 `code`。接口只允许中国大陆 11 位手机号，发送失败不会向前端返回阿里云原始响应或凭据。
 
 ## 五、Docker Compose 生产部署
 
