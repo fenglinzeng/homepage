@@ -72,7 +72,9 @@ export async function sendSms({ msg, telephone }: SendSmsInput) {
   const body = response.body
 
   if (body?.code !== 'OK') {
-    throw new Error('阿里云短信服务返回失败')
+    const providerCode = body?.code || `HTTP_${response.statusCode ?? 'UNKNOWN'}`
+    const providerMessage = body?.message || '未知错误'
+    throw new Error(`阿里云短信服务返回失败 [${providerCode}]：${providerMessage}`)
   }
 
   return {
