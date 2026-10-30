@@ -16,6 +16,17 @@ useHead({
 
 onMounted(() => {
   dark.value = localStorage.getItem('about-theme') === 'dark'
+
+  const trackingSrc = 'https://hm.baidu.com/hm.js?c88fca6e814bc9b849ba1ef86bd2f438'
+  if (document.querySelector(`script[src="${trackingSrc}"]`)) return
+
+  window._hmt = window._hmt || []
+  const hm = document.createElement('script')
+  hm.src = trackingSrc
+  const firstScript = document.getElementsByTagName('script')[0]
+  if (firstScript?.parentNode) {
+    firstScript.parentNode.insertBefore(hm, firstScript)
+  }
 })
 
 function toggleTheme() {
