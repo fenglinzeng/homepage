@@ -32,7 +32,7 @@ export default defineNuxtConfig({
         { 'http-equiv': 'X-UA-Compatible', content: 'IE=edge,chrome=1' },
         {
           name: 'description',
-          content: '我叫冯麟增，前端工程师，海南人，毕业于华北科技学院，目前在帝都某十八线互联网公司搬砖。 /*靠代码吃饭，喜欢骑行，爱好摄影 */'
+          content: '我叫冯麟增，全栈工程师，现居海口，本科毕业于华北科技学院，目前海南大学MPA在读。 /*靠代码吃饭，喜欢骑行、网球，爱好摄影、旅游 */'
         },
         { name: 'HandheldFriendly', content: 'True' },
         { name: 'baidu-site-verification', content: 'KQZvQlzTAL' },

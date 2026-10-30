@@ -2,9 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import aboutData from '../data/about-data.js'
 
-const route = useRoute()
 const dark = ref(false)
-const model = computed(() => aboutData.models.find(item => item.id === route.query.model) || aboutData.models[0])
+const model = aboutData.models[0]
 const introMeta = computed(() => aboutData.profile.introMeta.split('·').map(item => item.trim()).filter(Boolean))
 const draft = aboutData.myDraft
 
@@ -98,15 +97,15 @@ function toggleTheme() {
           <div class="philosophy-list"><article v-for="item in draft.philosophy" :key="item.title" class="philosophy-item"><h3>{{ item.title }}</h3><ul><li v-for="line in item.items" :key="line"><span class="philosophy-dot" aria-hidden="true" /><span>{{ line }}</span></li></ul></article></div>
         </section>
         <section id="works" class="card section-card">
-          <div class="section-heading"><h2>代表文章</h2><p>内容加载中</p></div>
+          <div class="section-heading"><h2>代表文章</h2><p>内容暂未开放。</p></div>
           <div class="work-list"><article v-for="n in 5" :key="n" class="skeleton-article" aria-hidden="true"><span class="skeleton-block skeleton-cover" /><span class="skeleton-article-body"><span class="skeleton-block skeleton-line title" /><span class="skeleton-block skeleton-line summary" /><span class="skeleton-block skeleton-line date" /></span></article></div>
         </section>
         <section id="social" class="card section-card">
-          <div class="section-heading"><h2>社媒动态</h2><p>内容加载中</p></div>
+          <div class="section-heading"><h2>社媒动态</h2><p>内容暂未开放。</p></div>
           <div class="social-list"><article v-for="n in 5" :key="n" class="skeleton-feed-item" aria-hidden="true"><span class="skeleton-feed-body"><span class="skeleton-block skeleton-line title" /><span class="skeleton-block skeleton-line summary" /><span class="skeleton-block skeleton-line date" /></span></article></div>
         </section>
         <section id="github" class="card section-card">
-          <div class="section-heading"><h2>GitHub 项目</h2><p>内容加载中</p></div>
+          <div class="section-heading"><h2>GitHub 项目</h2><p>内容暂未开放。</p></div>
           <div class="github-list"><article v-for="n in 5" :key="n" class="skeleton-project-item" aria-hidden="true"><span class="skeleton-project-body"><span class="skeleton-block skeleton-line title" /><span class="skeleton-block skeleton-line summary" /></span></article></div>
         </section>
         <section id="contact" class="card section-card">
