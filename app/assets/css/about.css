@@ -223,7 +223,7 @@
       .about-page { font-family: var(--sans); line-height: 1.7; }
       .site-header { border-color: var(--line); backdrop-filter: none; }
       .header-inner, .page-shell, .site-footer { width: min(100%, 1120px); }
-      .brand-mark { width: 30px; height: 30px; border-radius: 50%; border-color: var(--line-strong); letter-spacing: 0; }
+      .brand-mark { display: block; width: 30px; height: 30px; border: 0; border-radius: 7px; object-fit: cover; }
       .brand small { margin-left: 3px; }
       .header-nav { gap: 26px; }
       .page-shell { padding-top: clamp(45px, 7vw, 96px); padding-bottom: 72px; }
@@ -241,12 +241,13 @@
         background: repeating-radial-gradient(circle at center, transparent 0 24px, var(--line) 25px 26px, transparent 27px 44px);
       }
       .profile-links::before, .profile-links::after {
-        content: ""; position: absolute; inset: 0; z-index: -1; border: 1px solid var(--line-strong);
-        border-radius: 50%; pointer-events: none; animation: contact-ripple 5s ease-out infinite;
+        content: ""; position: absolute; inset: 0; z-index: -1; border: 2px solid color-mix(in srgb, var(--violet) 65%, transparent);
+        border-radius: 50%; pointer-events: none; animation: contact-ripple 3.8s ease-out infinite;
       }
-      .profile-links::after { animation-delay: -2.5s; }
+      .profile-links::after { animation-delay: -1.9s; }
       @keyframes contact-ripple {
-        0% { transform: scale(.2); opacity: .65; }
+        0% { transform: scale(.2); opacity: .85; }
+        65% { opacity: .55; }
         100% { transform: scale(1); opacity: 0; }
       }
       .profile-links a { display: grid; place-items: center; width: 38px; height: 38px; border-color: var(--line-strong); border-radius: 50%; background: var(--bg); }
@@ -293,7 +294,12 @@
       .chat-list { gap: 15px; }
       .chat-list li { grid-template-columns: 26px minmax(0, 1fr); }
       .disclaimer { margin-top: 22px; padding: 24px 0 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; }
-      .site-footer { padding-top: 24px; border-top: 1px solid var(--line); }
+      .disclaimer p { margin: 0; }
+      .disclaimer p + p { margin-top: 6px; }
+      .blog-link { color: var(--violet); text-decoration: underline; text-underline-offset: 3px; }
+      .site-footer { width: 100%; padding-top: 24px; border-top: 1px solid var(--line); text-align: center; }
+      .site-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+      .site-footer a:hover { color: var(--heading); }
       :focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
       @media (max-width: 720px) {
         .page-shell { padding-top: 40px; }

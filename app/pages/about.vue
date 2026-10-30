@@ -28,7 +28,7 @@ function toggleTheme() {
   <div class="about-page" :class="{ dark }">
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="#top" aria-label="返回顶部"><span class="brand-mark">AI</span><span>{{ aboutData.profile.shortName }}</span><small>About</small></a>
+        <a class="brand" href="#top" aria-label="返回顶部"><img class="brand-mark" src="/images/icon.png" alt=""><span>{{ aboutData.profile.shortName }}</span><small>About</small></a>
         <nav class="header-nav" aria-label="页面板块导航">
           <a v-for="item in aboutData.profile.navigation" :key="item.target" :href="item.target">{{ item.label }}</a>
         </nav>
@@ -102,10 +102,16 @@ function toggleTheme() {
           <div class="section-heading"><h2>跟我聊什么最来劲</h2><p>AI 从我的公开记录里挑的，真人和 AI 分身都接得住</p></div>
           <ol class="chat-list"><li v-for="topic in draft.chatTopics" :key="topic">{{ topic }}</li></ol>
         </section>
-        <section class="disclaimer">这是一份由 AI 协助整理的个人档案。模型的判断只适合拿来寻找表达，不替代事实；最终版本请以你的公开文章、项目和亲自确认过的经历为准。</section>
+        <section class="disclaimer">
+          <p>本页由 AI（GPT-6）基于冯麟增的博客文章、社媒动态、GitHub 项目和公开履历生成，只反映公开内容里能观察到的部分，难免有偏差和遗漏，一切以他的原文为准。</p>
+          <p>更新于 2026年8月17日 12:30·GPT-6 by OpenAI·来源 博客 / 微博 / 小红书 / Github</p>
+          <p>若你希望了解更完整的第一手内容，可直接查看<a class="blog-link" href="https://brofen.cn/">博客</a>。</p>
+        </section>
       </div>
     </main>
-    <footer class="site-footer">当前参考模型：{{ model.label }} · {{ aboutData.profile.introMeta }}</footer>
+    <footer class="site-footer">
+      © 2026 brofen.cn · <a href="https://beian.miit.gov.cn/">琼ICP备2021008318号-1</a>
+    </footer>
   </div>
 </template>
 

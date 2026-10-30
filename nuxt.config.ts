@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   // 保持与当前 Node/Nuxt 版本兼容性
   compatibilityDate: '2025-07-15',
 
+  // 首页统一跳转到个人介绍页
+  routeRules: {
+    '/': { redirect: '/about' }
+  },
+
   // 开启开发者工具（开发模式下按 Shift + Option + D 唤出）
   devtools: { enabled: true },
 
