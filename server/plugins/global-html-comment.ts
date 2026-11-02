@@ -32,7 +32,11 @@ const pageComment = `<!--
 -->`
 
 export default defineNitroPlugin((nitroApp) => {
-  nitroApp.hooks.hook('render:html', (html) => {
-    html.head.push(pageComment)
+  nitroApp.hooks.hook('render:response', (response) => {
+    if (typeof response.body !== 'string') {
+      return
+    }
+
+    response.body = response.body.replace(/<html(?=[\s>])/i, `${pageComment}\n<html`)
   })
 })
