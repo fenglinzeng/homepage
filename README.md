@@ -62,6 +62,7 @@ homepage/
 | `/avatar` | 接口 | `server/routes/avatar.get.ts`、`server/utils/avatar-generator.js` |
 | `/awareness` | 页面 | `app/pages/awareness.vue` |
 | `GET /bwhTraffic/report` | 接口 | `server/routes/bwhTraffic/report.get.ts` |
+| `GET /wechat/signature` | 接口 | `server/routes/wechat/signature.get.ts`、`server/utils/wechat-js-sdk.ts` |
 | `bwhTrafficReport` | 定时任务 | `server/plugins/bwh-traffic-schedule.ts`，每日 Asia/Shanghai 08:00 |
 
 新增服务端接口放在 `server/routes/`，按 Nitro 文件名约定表达 HTTP 方法；共享逻辑放在 `server/utils/`。服务端密钥和 Token 只从环境变量读取，不写入仓库。
@@ -82,6 +83,8 @@ node .output/server/index.mjs
 BWH 汇报配置使用 `BWH_TRAFFIC_API_URL`、`BWH_TRAFFIC_WEBHOOK_URL` 和手动接口令牌 `BWH_TRAFFIC_REPORT_TOKEN`，只在本机或生产服务器的 `.env` 中填写。手动调用时通过 `x-bwh-traffic-token` 请求头传入令牌。`BWH_TRAFFIC_SCHEDULE_ENABLED` 在代码和 `.env.example` 中默认是 `false`；生产按实际调度需要设置为 `true`。本地开发通常保持 `false`，避免本地实例发送真实汇报。
 
 短信接口 `POST /sms/send` 需要请求头 `x-sms-token`，请求体为 `{"msg":"123456","telephone":"17600119277"}`。服务端使用 `SMS_SEND_TOKEN` 校验令牌，并使用 `ALIBABA_CLOUD_ACCESS_KEY_ID`、`ALIBABA_CLOUD_ACCESS_KEY_SECRET`、`SMS_SIGN_NAME`、`SMS_TEMPLATE_CODE` 和 `SMS_TEMPLATE_PARAM` 调用阿里云短信；当前验证码模板要求请求体中的 `msg` 为 1-64 个英文字母或数字，接口会用它覆盖模板参数中的 `code`。接口只允许中国大陆 11 位手机号；参数校验失败时，`error.fields` 会返回失败字段的原始传入值，阿里云调用失败时只返回通用错误，不返回完整 SDK 响应、凭据或令牌。
+
+微信分享签名接口 `GET /wechat/signature?url=<页面完整地址>` 使用 `WECHAT_OFFICIAL_ACCOUNT_APP_ID` 和 `WECHAT_OFFICIAL_ACCOUNT_APP_SECRET` 获取 JS-SDK 签名，并仅允许 `WECHAT_JS_SDK_ALLOWED_ORIGINS` 中的 HTTPS 页面来源。白名单多个来源用逗号分隔；AppSecret 只配置在服务端 `.env`，不要放进前端构建变量。微信公众平台还需配置对应的 JS 接口安全域名。
 
 ## 五、Docker Compose 生产部署
 

@@ -22,6 +22,7 @@
 | `/avatar` | Nuxt 4 | `server/routes/avatar.get.ts`、`server/utils/avatar-generator.js` |
 | `/awareness` | Nuxt 4 | `app/pages/awareness.vue` |
 | `GET /bwhTraffic/report` | Nuxt 4 | `server/routes/bwhTraffic/report.get.ts` |
+| `GET /wechat/signature` | Nuxt 4 | `server/routes/wechat/signature.get.ts` |
 | `bwhTrafficReport` | Nuxt 4 | `server/plugins/bwh-traffic-schedule.ts`，每日 Asia/Shanghai 08:00 |
 
 ## 3. 样式与工程规范
