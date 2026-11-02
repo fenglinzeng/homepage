@@ -116,6 +116,7 @@ function toggleTheme() {
           <p>本页由 AI（GPT-6）基于冯麟增的博客文章、社媒动态、GitHub 项目和公开履历生成，只反映公开内容里能观察到的部分，难免有偏差和遗漏，一切以他的原文为准。</p>
           <p>更新于 2026年8月17日 12:30·GPT-6 by OpenAI·来源 博客 / 微博 / 小红书 / Github</p>
           <p>若你希望了解更完整的第一手内容，可直接查看<a class="blog-link" href="https://brofen.cn/">博客</a>。</p>
+          <p>若你想跟他联系，可以给他<a href="mailto:fenglinzeng@qq.com">发邮件</a>。</p>
         </section>
       </div>
     </main>
